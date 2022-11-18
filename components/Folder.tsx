@@ -6,7 +6,7 @@ import Thumbnail from './Thumbnail'
 export default function Folder(props: { file: FileDesc, onEnter: (file: FileDesc) => void }) {
   return (
     <Thumbnail file={props.file} onClick={props.onEnter} >
-      <FolderOutlined sx={{ mb: 2 }} />
+      <FolderOutlined sx={{ mb: 2 }} fontSize="large"/>
     </Thumbnail>
   )
 }

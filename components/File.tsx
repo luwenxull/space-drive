@@ -20,7 +20,7 @@ export default function File(props: { file: FileDesc, pd: string[] }) {
     // return <a href={url}>{props.file.name}</a>
     return (
       <Thumbnail file={props.file} onClick={() => window.open(url)} >
-        <DescriptionOutlined sx={{ mb: 2 }} />
+        <DescriptionOutlined sx={{ mb: 2 }} fontSize="large"/>
       </Thumbnail>
     )
   }

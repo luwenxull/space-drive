@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { Backdrop } from '@mui/material'
+import { Backdrop, LinearProgress } from '@mui/material'
 import { AxiosResponse } from "axios"
 import { modules } from '@/api/index'
 import File from "@/components/File"
@@ -16,7 +16,7 @@ export interface FileDesc {
 
 export default function Home() {
   const [dirs, setDirs] = useState<string[]>(['/'])
-  const [files, setFiles] = useState<FileDesc[]>([])
+  const [files, setFiles] = useState<{ list: FileDesc[], loading: boolean }>({ list: [], loading: false })
   const [bigImage, setBigImage] = useState<string | null>(null)
   const callbacks = useRef<{ [key: string]: () => void }>({})
   const [lazyImageContext, setLazyImageContext] = useState<{
@@ -42,30 +42,31 @@ export default function Home() {
   useEffect(() => {
     modules.file.get({ query: dirs.length ? { path: dirs.join('/') } : {} })
       .then((res: AxiosResponse<FileDesc[]>) => {
-        setFiles(res.data)
+        setFiles({ loading: false, list: res.data })
       })
   }, [dirs])
 
   function handleEnter(f: FileDesc) {
     setDirs([...dirs, f.name])
-    setFiles([])
+    setFiles({ loading: true, list: [] })
   }
 
   function handleJump(index: number) {
     if (index >= 0) {
       setDirs(dirs.slice(0, index + 1))
-      setFiles([])
+      setFiles({ loading: true, list: [] })
     }
   }
 
   return (
     <>
       <Entries dirs={dirs} onJump={handleJump} />
+      {files.loading ? <LinearProgress />: null}
       <LazyImageContext.Provider value={lazyImageContext}>
         <BigImageContext.Provider value={setBigImage}>
           <div className="grid">
             {
-              files.map(f =>
+              files.list.map(f =>
                 f.isDir ? <Folder file={f} onEnter={handleEnter} /> : <File file={f} pd={dirs} />
               )
             }
