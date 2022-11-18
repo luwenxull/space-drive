@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { IncomingMessage, OutgoingMessage } from 'http';
+import { IncomingMessage } from 'http';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import http from 'http';
 
@@ -9,7 +9,7 @@ export default function handler(
   client_res: NextApiResponse
 ) {
   const options = {
-    hostname: 'localhost',
+    hostname: '0.0.0.0',
     port: 3000,
     path: client_req.url,
     method: client_req.method,
