@@ -48,6 +48,7 @@ export default function Home() {
 
   function handleEnter(f: FileDesc) {
     setDirs([...dirs, f.name])
+    setFiles([])
   }
 
   function handleJump(index: number) {

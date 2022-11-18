@@ -7,16 +7,15 @@ export default function Entries(props: {
 }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed">
-        <Toolbar>
+      <AppBar position="sticky">
+        <Toolbar variant='dense'>
           <IconButton
-            size="large"
-            edge="start"
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
+            onClick={() => props.onJump(props.dirs.length - 2)}
           >
-            <TurnLeftOutlined sx={{ mx: 1 }} onClick={() => props.onJump(props.dirs.length - 2)} />
+            <TurnLeftOutlined />
           </IconButton>
           <Breadcrumbs aria-label="breadcrumb" separator="-">
             {props.dirs.map((dir, index) => {
