@@ -9,7 +9,7 @@ export default function Folder(props: PropsWithChildren<{ file: FileDesc, onClic
       <Stack alignItems="center" justifyContent="center" sx={{ height: '100%' }}>
         {props.children}
         <Tooltip title={props.file.name}>
-          <Typography className={styles.name} sx={{ px: 1 }}>
+          <Typography className={styles.name} sx={{ px: 1, fontFamily: 'serif' }}>
             {props.file.name}
           </Typography>
         </Tooltip>

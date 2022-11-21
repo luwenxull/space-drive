@@ -15,9 +15,8 @@ const VideoExts = ['mp4', 'webm', 'ogg']
 export default function File(props: { file: FileDesc, pd: string[] }) {
   const url = resolveFileUrl(props.file, props.pd), isImg = ImgExts.includes(props.file.name.split('.').pop() || '')
   if (isImg) {
-    return <LazyImage url={url} />
+    return <LazyImage url={url}/>
   } else {
-    // return <a href={url}>{props.file.name}</a>
     return (
       <Thumbnail file={props.file} onClick={() => window.open(url)} >
         <DescriptionOutlined sx={{ mb: 2 }} fontSize="large"/>

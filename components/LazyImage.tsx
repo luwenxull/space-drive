@@ -1,5 +1,5 @@
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { BigImageContext, LazyImageContext } from '@/context/index'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { BigImageContext, ImageChainNode, LazyImageContext } from '@/context/index'
 import placeholderPic from '@/public/placeholder-pic.svg'
 import styles from './css/File.module.css'
 
@@ -7,6 +7,7 @@ export default function File(props: { url: string }) {
   const [shouldRender, setShouldRender] = useState(false)
   const id = useRef(Math.random().toString(36).slice(2))
   const ref = useRef<HTMLImageElement>(null)
+  const display = useRef<() => void>(() => { })
   const lazyImageContext = useContext(LazyImageContext)
   const bigImageContext = useContext(BigImageContext)
   useEffect(() => {
@@ -25,10 +26,17 @@ export default function File(props: { url: string }) {
       }
     }
   }, [lazyImageContext])
+  useEffect(() => {
+    if (bigImageContext) {
+      const { remove, display: _display } = bigImageContext(props.url)
+      display.current = _display
+      return remove
+    }
+  }, [bigImageContext])
   return <div
     data-id={id.current}
     ref={ref}
-    onClick={() => bigImageContext(props.url)}
+    onClick={() => display.current()}
     className={`${styles.file} ${shouldRender ? '' : styles.empty}`}
     // src={shouldRender ? props.url : placeholderPic.src}
     style={{

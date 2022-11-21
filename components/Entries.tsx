@@ -1,4 +1,4 @@
-import { Stack, Breadcrumbs, Link, Chip, Button, Box, AppBar, Toolbar, IconButton } from '@mui/material'
+import { Breadcrumbs, Link, AppBar, Toolbar, IconButton } from '@mui/material'
 import TurnLeftOutlined from '@mui/icons-material/TurnLeftOutlined'
 
 export default function Entries(props: {
@@ -6,7 +6,7 @@ export default function Entries(props: {
   onJump: (index: number) => void,
 }) {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <>
       <AppBar position="sticky">
         <Toolbar variant='dense'>
           <IconButton
@@ -17,7 +17,7 @@ export default function Entries(props: {
           >
             <TurnLeftOutlined />
           </IconButton>
-          <Breadcrumbs aria-label="breadcrumb" separator="-">
+          <Breadcrumbs aria-label="breadcrumb" separator="-" sx={{color: '#fff'}}>
             {props.dirs.map((dir, index) => {
               return (
                 <Link
@@ -33,9 +33,8 @@ export default function Entries(props: {
               )
             })}
           </Breadcrumbs>
-          {/* <Button color="inherit">Login</Button> */}
         </Toolbar>
       </AppBar>
-    </Box>
+    </>
   )
 }
