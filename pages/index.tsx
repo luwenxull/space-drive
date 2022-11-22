@@ -128,12 +128,12 @@ export default function Home() {
           // sx={{ position: 'absolute', bottom: '4px' }}
           sx={{ position: 'absolute', width: '100%' }}
         >
-          <Stack sx={{ height: '100%', bgcolor: '#0001' }} justifyContent="center">
+          <Stack sx={{ height: '100%', bgcolor: '#0002', borderRadius: '50%' }} justifyContent="center">
             <IconButton color="inherit" onClick={(e) => next(-1, e)} sx={{ opacity: 1 }}>
               <ChevronLeft />
             </IconButton>
           </Stack>
-          <Stack sx={{ height: '100%', bgcolor: '#0001' }} justifyContent="center">
+          <Stack sx={{ height: '100%', bgcolor: '#0002', borderRadius: '50%' }} justifyContent="center">
             <IconButton color="inherit" onClick={(e) => next(1, e)} sx={{ opacity: 1 }}>
               <ChevronRight />
             </IconButton>
