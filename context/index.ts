@@ -40,3 +40,5 @@ export const BigImageContext = createContext<
     display: () => void,
   }) | null
 >(null);
+
+// export const DirContext = createContext<(dirs: string[]) => void>(() => {});

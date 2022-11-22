@@ -15,17 +15,43 @@ export interface FileDesc {
   name: string,
 }
 
-export default function Home() {
+function getPath(dirs: string[]) {
+  return dirs.length > 1 ? dirs.slice(1).join('/') : '/'
+}
+
+export default function PathResolver() {
+  const [dirs, setDirs] = useState<string[]>([])
+  useEffect(() => {
+    const path = location.hash.slice(1)
+    if (path) {
+      setDirs(['/'].concat(path.split('/').filter(p => p !== '')))
+    } else {
+      setDirs(['/'])
+    }
+  }, [])
+  function _setDirs(dirs: string[]) {
+    location.hash = getPath(dirs)
+    setDirs(dirs)
+  }
+  return dirs.length ? <Driver dirs={dirs} setDirs={_setDirs} /> : null
+}
+
+function Driver(props: {
+  dirs: string[],
+  setDirs: (dirs: string[]) => void
+}) {
+  const { dirs, setDirs } = props
   const callbacks = useRef<{ [key: string]: () => void }>({})
   const imageChainRoot = useRef<ImageChainRoot>({})
-  const [dirs, setDirs] = useState<string[]>(['/'])
   const [files, setFiles] = useState<{ list: FileDesc[], loading: boolean }>({ list: [], loading: false })
   const [bigImage, setBigImage] = useState<ImageChainNode | null>(null)
+  // 懒加载
   const [lazyImageContext, setLazyImageContext] = useState<{
     io: IntersectionObserver,
     callbacks: { [p: string]: () => void }
   } | null>(null)
-  const [bigImageContext] = useState(() => (src: string) => {
+  // 大图
+  const bigImageContext = useRef((src: string) => {
     if (imageChainRoot.current.end) {
       const end = {
         prev: imageChainRoot.current.end,
@@ -67,13 +93,14 @@ export default function Home() {
     })
   }, [])
   useEffect(() => {
-    modules.file.get({ query: dirs.length ? { path: dirs.join('/') } : {} })
+    modules.file.get({ query: { path: getPath(dirs) } })
       .then((res: AxiosResponse<FileDesc[]>) => {
         setFiles({ loading: false, list: res.data })
       })
   }, [dirs])
 
   function handleEnter(f: FileDesc) {
+    debugger
     setDirs([...dirs, f.name])
     setFiles({ loading: true, list: [] })
   }
@@ -105,11 +132,11 @@ export default function Home() {
       <Entries dirs={dirs} onJump={handleJump} />
       {files.loading ? <LinearProgress /> : null}
       <LazyImageContext.Provider value={lazyImageContext}>
-        <BigImageContext.Provider value={bigImageContext}>
+        <BigImageContext.Provider value={bigImageContext.current}>
           <div className="grid" style={bigImage !== null ? { filter: 'blur(4px)' } : undefined}>
             {
-              files.list.map((f) =>
-                f.isDir ? <Folder file={f} onEnter={handleEnter} /> : <File file={f} pd={dirs} />
+              files.list.map((f, i) =>
+                f.isDir ? <Folder file={f} onEnter={handleEnter} key={i} /> : <File file={f} pd={dirs} key={i} />
               )
             }
           </div>
